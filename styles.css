@@ -1,0 +1,9 @@
+/* Estilos complementares e customizações de PWA */
+body {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ad-container {
+  min-height: 90px;
+}

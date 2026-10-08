@@ -1,0 +1,21 @@
+{
+  "name": "UrbanoFlex - Painel Urbano Inteligente",
+  "short_name": "UrbanoFlex",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e293b",
+  "description": "Seu dia a dia em um só lugar: clima, cotações e mobilidade urbana.",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/869/869869.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/869/869869.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

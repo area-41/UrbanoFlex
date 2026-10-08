@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1e293b">
+  <title>UrbanoFlex - Informações Essenciais da sua Cidade</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <!-- Tailwind CSS via CDN para estilização rápida e responsiva -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Header -->
+  <header class="bg-slate-800 border-b border-slate-700 p-4 sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold text-emerald-400 flex items-center gap-2">
+        <span>⚡</span> UrbanoFlex
+      </h1>
+      <button id="install-btn" class="hidden bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-semibold px-3 py-1.5 rounded-lg text-sm transition">
+        Instalar App
+      </button>
+    </div>
+  </header>
+
+  <!-- Conteúdo Principal -->
+  <main class="max-w-4xl mx-auto w-full p-4 flex-grow space-y-6">
+
+    <!-- Busca de Localização -->
+    <section class="bg-slate-800 p-4 rounded-xl border border-slate-700 shadow-md">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input type="text" id="cep-input" placeholder="Digite seu CEP (ex: 01001000)" 
+               class="bg-slate-900 border border-slate-700 text-slate-100 px-4 py-2 rounded-lg flex-grow focus:outline-none focus:border-emerald-500" maxlength="8">
+        <button id="search-cep-btn" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-5 py-2 rounded-lg transition">
+          Buscar
+        </button>
+        <button id="geo-btn" class="bg-slate-700 hover:bg-slate-600 text-slate-100 px-4 py-2 rounded-lg transition text-sm">
+          📍 Usar GPS
+        </button>
+      </div>
+      <p id="location-info" class="text-slate-400 text-sm mt-2">Localização: Carregando...</p>
+    </section>
+
+    <!-- Banner de Anúncio Superior (Exemplo AdSense) -->
+    <div class="ad-container bg-slate-800/50 border border-dashed border-slate-700 rounded-lg p-2 text-center text-xs text-slate-500">
+      <!-- Espaço para Bloco de Anúncios AdSense / Media.net -->
+      <p>Publicidade</p>
+      <div class="h-16 flex items-center justify-center">[ Banner de Anúncio Responsive ]</div>
+    </div>
+
+    <!-- Grid de Informações Vitais -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Card 1: Clima e Tempo -->
+      <section class="bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-md">
+        <div class="flex justify-between items-center mb-3">
+          <h2 class="text-lg font-bold text-amber-400">☀️ Previsão do Tempo</h2>
+          <span id="weather-temp" class="text-2xl font-extrabold text-slate-100">--°C</span>
+        </div>
+        <div id="weather-details" class="space-y-2 text-slate-300 text-sm">
+          <p>Condição: <span id="weather-desc">Carregando...</span></p>
+          <p>Vento: <span id="weather-wind">-- km/h</span></p>
+          <p>Umidade: <span id="weather-humidity">--%</span></p>
+        </div>
+      </section>
+
+      <!-- Card 2: Cotações e Indicadores Econômicos -->
+      <section class="bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-md">
+        <h2 class="text-lg font-bold text-emerald-400 mb-3">💵 Cotações de Hoje</h2>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+            <span class="text-slate-300">Dólar Comercial (USD)</span>
+            <span id="usd-val" class="font-bold text-slate-100">R$ --</span>
+          </div>
+          <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+            <span class="text-slate-300">Euro (EUR)</span>
+            <span id="eur-val" class="font-bold text-slate-100">R$ --</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-slate-300">Bitcoin (BTC)</span>
+            <span id="btc-val" class="font-bold text-slate-100">R$ --</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Card 3: Mobilidade & Utilidades -->
+    <section class="bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-md">
+      <h2 class="text-lg font-bold text-cyan-400 mb-3">🚗 Mobilidade e Serviços da Sua Região</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <a id="link-maps" href="https://www.google.com/maps" target="_blank" class="bg-slate-700 hover:bg-slate-600 p-3 rounded-lg text-center transition block text-sm font-medium">
+          🗺️ Trânsito Agora
+        </a>
+        <a id="link-waze" href="https://www.waze.com/live-map" target="_blank" class="bg-slate-700 hover:bg-slate-600 p-3 rounded-lg text-center transition block text-sm font-medium">
+          🚘 Alertas Waze
+        </a>
+        <a href="https://www.inmet.gov.br" target="_blank" class="bg-slate-700 hover:bg-slate-600 p-3 rounded-lg text-center transition block text-sm font-medium">
+          ⚠️ Alertas INMET
+        </a>
+      </div>
+    </section>
+    <!-- Card 4: Bares, Restaurantes e Gastronomia Local (OpenStreetMap API) -->
+    <section class="bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-md space-y-4">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-bold text-rose-400 flex items-center gap-2">
+          <span>🍕</span> Gastronomia & Lazer no Seu Bairro
+        </h2>
+        <button id="fetch-places-btn" class="bg-slate-700 hover:bg-slate-600 text-xs px-3 py-1 rounded-lg text-slate-200 transition">
+          🔄 Atualizar Locais
+        </button>
+      </div>
+
+      <!-- Filtros Rápidos -->
+      <div class="flex gap-2 text-xs overflow-x-auto pb-1">
+        <button onclick="filterPlaces('restaurant')" class="bg-rose-500/20 text-rose-300 border border-rose-500/40 px-3 py-1 rounded-full font-medium whitespace-nowrap">Restaurantes</button>
+        <button onclick="filterPlaces('bar')" class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-3 py-1 rounded-full font-medium whitespace-nowrap">Bares & Pubs</button>
+        <button onclick="filterPlaces('cafe')" class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 px-3 py-1 rounded-full font-medium whitespace-nowrap">Cafés & Padarias</button>
+      </div>
+
+      <!-- Lista Dinâmica de Locais Proximos -->
+      <div id="places-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        <p class="text-slate-400 text-xs col-span-2">Digite seu CEP ou ative o GPS para listar bares e restaurantes mais próximos.</p>
+      </div>
+    </section>
+
+    <!-- Card 5: Agenda de Shows e Eventos na Região -->
+    <section class="bg-slate-800 p-5 rounded-xl border border-slate-700 shadow-md">
+      <h2 class="text-lg font-bold text-purple-400 mb-3 flex items-center gap-2">
+        <span>🎟️</span> Shows & Eventos Próximos
+      </h2>
+      <p class="text-slate-300 text-sm mb-4">Descubra o que está acontecendo na sua cidade e arredores:</p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        <a id="link-events-google" href="https://www.google.com/search?q=eventos+e+shows+proximos" target="_blank" class="bg-slate-700 hover:bg-slate-600 p-3 rounded-lg text-center transition block text-sm font-medium">
+          🎉 Shows & Festas
+        </a>
+        <a id="link-sympla" href="https://www.sympla.com.br" target="_blank" class="bg-slate-700 hover:bg-slate-600 p-3 rounded-lg text-center transition block text-sm font-medium">
+          🎫 Sympla Região
+        </a>
+        <a id="link-maps-food" href="https://www.google.com/maps/search/restaurantes+e+bares" target="_blank" class="bg-slate-700 hover:bg-slate-600 p-3 rounded-lg text-center transition block text-sm font-medium">
+          📍 Ver no Maps
+        </a>
+      </div>
+    </section>
+
+    <!-- Banner de Anúncio Inferior -->
+    <div class="ad-container bg-slate-800/50 border border-dashed border-slate-700 rounded-lg p-2 text-center text-xs text-slate-500">
+      <p>Publicidade</p>
+      <div class="h-24 flex items-center justify-center">[ Banner de Anúncio Nativo / In-Feed ]</div>
+    </div>
+
+    <!-- Apoie o Projeto (Apoio / Pix) -->
+    <section class="bg-slate-800/80 p-4 rounded-xl border border-slate-700 text-center">
+      <p class="text-sm text-slate-300 mb-2">Este aplicativo é gratuito e baseado em dados abertos.</p>
+      <button onclick="alert('Chave Pix para apoio: seu-email@exemplo.com')" class="bg-slate-700 hover:bg-slate-600 text-emerald-400 font-semibold px-4 py-2 rounded-lg text-sm transition border border-emerald-500/30">
+        ☕ Apoiar o desenvolvedor via Pix
+      </button>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-800 border-t border-slate-700 p-4 text-center text-xs text-slate-500">
+    <p>Painel Urbano BR &copy; 2026 - Dados Abertos e Públicos (INMET, AwesomeAPI, ViaCEP)</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
