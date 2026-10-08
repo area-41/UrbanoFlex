@@ -218,6 +218,7 @@ async function fetchNearbyPlaces(lat, lon) {
 }
 
 // Renderiza a lista de lugares na tela
+// Renderização dos Estabelecimentos (Bares/Restaurantes)
 function renderPlaces(places, filterType = null) {
   const container = document.getElementById('places-container');
   container.innerHTML = '';
@@ -229,7 +230,7 @@ function renderPlaces(places, filterType = null) {
   }
 
   if (filtered.length === 0) {
-    container.innerHTML = `<p class="text-slate-400 text-xs col-span-2">Nenhum local nomeado encontrado neste filtro na região próxima.</p>`;
+    container.innerHTML = `<p class="text-teal-200 text-base col-span-2">Nenhum local encontrado para esta categoria na área selecionada.</p>`;
     return;
   }
 
@@ -237,21 +238,20 @@ function renderPlaces(places, filterType = null) {
     const name = place.tags.name;
     const type = translateAmenity(place.tags.amenity);
     const street = place.tags['addr:street'] ? `${place.tags['addr:street']}` : 'Próximo a você';
-    const cuisine = place.tags.cuisine ? `• ${place.tags.cuisine}` : '';
 
     const card = document.createElement('div');
-    card.className = "bg-slate-900/60 p-3 rounded-lg border border-slate-700/60 flex flex-col justify-between";
+    card.className = "bg-teal-950/80 p-4 rounded-xl border border-teal-700/60 flex flex-col justify-between shadow-sm";
     card.innerHTML = `
       <div>
-        <div class="flex justify-between items-start mb-1">
-          <h3 class="font-semibold text-slate-100 text-sm leading-snug">${name}</h3>
-          <span class="text-[10px] bg-slate-800 text-rose-300 px-1.5 py-0.5 rounded border border-rose-500/20">${type}</span>
+        <div class="flex justify-between items-start mb-1.5 gap-2">
+          <h3 class="font-bold text-teal-50 text-base leading-snug">${name}</h3>
+          <span class="text-xs bg-teal-800 text-teal-200 px-2 py-0.5 rounded-md font-semibold border border-teal-600/40">${type}</span>
         </div>
-        <p class="text-xs text-slate-400">${street} ${cuisine}</p>
+        <p class="text-sm text-teal-200/90">${street}</p>
       </div>
       <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + currentCityName)}" 
          target="_blank" 
-         class="text-[11px] text-rose-400 hover:underline mt-2 inline-block">
+         class="text-sm font-bold text-teal-300 hover:underline mt-3 inline-block">
         Ver no Mapa ↗
       </a>
     `;
@@ -324,6 +324,7 @@ async function fetchGeneralNews() {
 }
 
 // Renderiza os cards de notícia na tela
+// Renderização do Card de Notícias em Preto e Branco
 function renderNews(newsItems) {
   const container = document.getElementById('news-container');
   container.innerHTML = '';
@@ -332,16 +333,58 @@ function renderNews(newsItems) {
     const pubDate = new Date(item.pubDate).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     
     const card = document.createElement('article');
-    card.className = "bg-slate-900/50 p-3 rounded-lg border border-slate-700/50 hover:border-slate-600 transition";
+    card.className = "bg-black p-4 rounded-xl border border-zinc-800 hover:border-zinc-500 transition shadow-sm";
     card.innerHTML = `
       <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="block group">
-        <h3 class="text-sm font-semibold text-slate-100 group-hover:text-sky-400 transition leading-snug mb-1">
+        <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-zinc-300 transition leading-snug mb-2">
           ${item.title}
         </h3>
-        <div class="flex justify-between items-center text-[11px] text-slate-400 mt-2">
+        <div class="flex justify-between items-center text-sm font-medium text-zinc-400">
           <span>${item.author || 'Fonte de Notícias'}</span>
           <span>${pubDate} ↗</span>
         </div>
+      </a>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// Renderização dos Estabelecimentos (Bares/Restaurantes)
+// Renderização dos Estabelecimentos (Bares/Restaurantes)
+function renderPlaces(places, filterType = null) {
+  const container = document.getElementById('places-container');
+  container.innerHTML = '';
+
+  let filtered = places.filter(p => p.tags && p.tags.name);
+
+  if (filterType) {
+    filtered = filtered.filter(p => p.tags.amenity === filterType);
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<p class="text-zinc-400 text-base col-span-2">Nenhum local encontrado para esta categoria na área selecionada.</p>`;
+    return;
+  }
+
+  filtered.slice(0, 6).forEach(place => {
+    const name = place.tags.name;
+    const type = translateAmenity(place.tags.amenity);
+    const street = place.tags['addr:street'] ? `${place.tags['addr:street']}` : 'Próximo a você';
+
+    const card = document.createElement('div');
+    card.className = "bg-black p-4 rounded-xl border border-zinc-800 flex flex-col justify-between shadow-sm";
+    card.innerHTML = `
+      <div>
+        <div class="flex justify-between items-start mb-1.5 gap-2">
+          <h3 class="font-bold text-white text-base leading-snug">${name}</h3>
+          <span class="text-xs bg-zinc-800 text-zinc-300 px-2 py-0.5 rounded-md font-semibold border border-zinc-700">${type}</span>
+        </div>
+        <p class="text-sm text-zinc-400">${street}</p>
+      </div>
+      <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name + ' ' + currentCityName)}" 
+         target="_blank" 
+         class="text-sm font-bold text-white hover:underline mt-3 inline-block">
+        Ver no Mapa ↗
       </a>
     `;
     container.appendChild(card);
@@ -355,4 +398,103 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.getElementById('refresh-news-btn').addEventListener('click', () => {
   fetchNews(currentCityName);
+});
+
+// 1. Lógica para carregar os posts do X no Ticker
+async function fetchXTicker() {
+  const tickerContainer = document.getElementById('x-ticker-content');
+  
+  // Utiliza feed de notícias / tópicos do X via conversor RSS
+  const xRssUrl = 'https://news.google.com/rss/search?q=site:x.com+OR+twitter&hl=pt-BR&gl=BR&ceid=BR:pt-419';
+  const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(xRssUrl)}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.status === 'ok' && data.items && data.items.length > 0) {
+      tickerContainer.innerHTML = '';
+      data.items.slice(0, 8).forEach(item => {
+        const tickerItem = document.createElement('a');
+        tickerItem.href = item.link;
+        tickerItem.target = '_blank';
+        tickerItem.rel = 'noopener noreferrer';
+        tickerItem.className = 'hover:text-white hover:underline transition flex items-center gap-2';
+        tickerItem.innerHTML = `
+          <span class="text-zinc-500 font-bold">•</span>
+          <span class="font-bold text-white">𝕏</span>
+          <span>${item.title}</span>
+        `;
+        tickerContainer.appendChild(tickerItem);
+      });
+    } else {
+      renderFallbackXTicker();
+    }
+  } catch (error) {
+    console.error('Erro ao carregar X Ticker:', error);
+    renderFallbackXTicker();
+  }
+}
+
+function renderFallbackXTicker() {
+  const tickerContainer = document.getElementById('x-ticker-content');
+  tickerContainer.innerHTML = `
+    <span>• <strong class="text-white">𝕏:</strong> Confira os assuntos mais comentados e tendências no Brasil</span>
+    <span>• <strong class="text-white">𝕏:</strong> Acompanhe postagens em tempo real sobre a sua região</span>
+  `;
+}
+
+// 2. Lógica para carregar o Carrossel do YouTube com Thumbnails
+async function fetchYouTubeCarousel() {
+  const container = document.getElementById('youtube-carousel');
+  
+  // Feed RSS oficial do YouTube (Em Alta)
+  const ytTrendingRss = 'https://www.youtube.com/feeds/videos.xml?chart=most_popular';
+  const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(ytTrendingRss)}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.status === 'ok' && data.items && data.items.length > 0) {
+      container.innerHTML = '';
+      
+      data.items.slice(0, 8).forEach(item => {
+        // Extrai o ID do vídeo do YouTube para gerar a miniatura da imagem (thumbnail)
+        const videoId = item.link.split('v=')[1] || '';
+        const thumbnailUrl = videoId 
+          ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+          : 'https://via.placeholder.com/200x110/18181b/ffffff?text=YouTube';
+
+        const card = document.createElement('a');
+        card.href = item.link;
+        card.target = '_blank';
+        card.rel = 'noopener noreferrer';
+        card.className = "flex-shrink-0 w-44 bg-black border border-zinc-800 rounded-xl overflow-hidden hover:border-zinc-500 transition group shadow-md";
+        
+        card.innerHTML = `
+          <div class="relative w-full h-24 bg-zinc-800 overflow-hidden">
+            <img src="${thumbnailUrl}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300 grayscale contrast-125">
+            <span class="absolute bottom-1 right-1 bg-black/80 text-[10px] text-white px-1.5 py-0.5 rounded font-bold">▶ Video</span>
+          </div>
+          <div class="p-2.5">
+            <h3 class="text-xs font-bold text-white line-clamp-2 leading-tight group-hover:text-zinc-300 transition">
+              ${item.title}
+            </h3>
+            <p class="text-[11px] text-zinc-400 mt-1 truncate">${item.author || 'YouTube'}</p>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+  } catch (error) {
+    console.error('Erro ao carregar carrossel do YouTube:', error);
+    container.innerHTML = `<p class="text-xs text-zinc-500">Não foi possível carregar os vídeos no momento.</p>`;
+  }
+}
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+  fetchXTicker();
+  fetchYouTubeCarousel();
 });

@@ -1,9 +1,20 @@
-/* Estilos complementares e customizações de PWA */
-body {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+/* Animação estilo Ticker de Telejornal */
+@keyframes ticker {
+  0% {
+    transform: translate3d(100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
 }
 
-.ad-container {
-  min-height: 90px;
+.ticker-wrapper {
+  display: inline-block;
+  white-space: nowrap;
+  animation: ticker 35s linear infinite;
+}
+
+/* Pausa o deslizamento ao passar o mouse ou tocar no celular para facilitar a leitura */
+.ticker-wrapper:hover {
+  animation-play-state: paused;
 }
