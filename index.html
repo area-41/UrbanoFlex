@@ -3,252 +3,213 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#000000">
-  <title>UrbanoFlex - Informações Essenciais da sua Cidade</title>
+  <meta name="theme-color" content="#0284c7">
+  <title>UrbanoFlex - Seu Painel Urbano</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="manifest.json">
   <script src="https://cdn.tailwindcss.com"></script>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 </head>
-<body class="bg-black text-white min-h-screen flex flex-col font-sans antialiased selection:bg-white selection:text-black">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col font-sans pb-20 selection:bg-sky-500 selection:text-white">
 
-  <!-- Header -->
-  <header class="bg-black border-b border-zinc-800 p-5 sticky top-0 z-50 shadow-md">
-    <div class="max-w-4xl mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-        <span class="mono-emoji">⚡</span> UrbanoFlex
-      </h1>
-      <button id="install-btn" class="hidden bg-white hover:bg-zinc-200 text-black font-bold px-4 py-2 rounded-xl text-base transition shadow-md">
-        Instalar App
+  <!-- Header Superior Ciano com Sombra Inferior -->
+  <header class="bg-gradient-to-r from-sky-600 via-cyan-600 to-teal-500 text-white p-5 pb-6 shadow-bottom sticky top-0 z-50">
+    <div class="max-w-md mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center font-bold text-lg shadow-inner">
+          ⚡
+        </div>
+        <div>
+          <h1 class="text-xl font-bold leading-tight">UrbanoFlex</h1>
+          <p class="text-xs text-sky-100 opacity-90">Sua cidade em tempo real</p>
+        </div>
+      </div>
+      <button id="install-btn" class="hidden bg-white text-sky-700 font-bold px-3.5 py-1.5 rounded-full text-xs shadow-bottom hover:bg-sky-50 transition">
+        Instalar
       </button>
     </div>
   </header>
 
-  <!-- Conteúdo Principal -->
-  <main class="max-w-4xl mx-auto w-full p-4 sm:p-6 flex-grow space-y-8">
-    <!-- 1. Barra de Notícias Ticker do X (Twitter) -->
-    <div class="bg-zinc-900 border-b border-zinc-800 py-2.5 overflow-hidden w-full flex items-center text-sm font-medium select-none">
-      <div class="bg-white text-black font-extrabold px-3 py-1 text-xs uppercase tracking-wider flex-shrink-0 z-10 ml-4 rounded-md shadow flex items-center gap-1.5">
-        <span>𝕏</span> Em Alta
-      </div>
+  <!-- Container Principal -->
+  <main class="max-w-md mx-auto w-full px-4 pt-4 space-y-5 flex-grow">
 
-      <div class="overflow-hidden w-full relative ml-3">
-        <div id="x-ticker-content" class="ticker-wrapper flex whitespace-nowrap gap-8 text-zinc-300">
-          <span>Carregando últimas postagens e tendências do X...</span>
+    <!-- 1. Ticker do X (Twitter) -->
+    <div class="bg-white rounded-2xl p-2.5 shadow-bottom border border-slate-200/80 flex items-center gap-2 overflow-hidden relative z-10">
+      <span class="bg-sky-600 text-white font-extrabold px-2.5 py-1 text-[11px] rounded-xl flex-shrink-0">
+        𝕏 Em Alta
+      </span>
+      <div class="overflow-hidden w-full relative">
+        <div id="x-ticker-content" class="ticker-wrapper flex whitespace-nowrap gap-6 text-xs text-slate-600 font-medium">
+          <span>Carregando destaques do X...</span>
         </div>
       </div>
     </div>
 
-
-    <!-- Busca de Localização -->
-    <section class="bg-zinc-900 p-6 rounded-2xl border border-zinc-800 shadow-2xl relative overflow-hidden">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div class="space-y-3 flex-grow z-10 w-full">
-          <label for="cep-input" class="block text-lg font-bold text-zinc-200">Localização e CEP</label>
-          <div class="flex flex-col sm:flex-row gap-3">
-            <input type="text" id="cep-input" placeholder="Digite seu CEP (ex: 01001000)" 
-                   class="bg-black border-2 border-zinc-700 text-white placeholder-zinc-500 text-base px-4 py-3 rounded-xl flex-grow focus:outline-none focus:border-white transition" maxlength="8">
-            <button id="search-cep-btn" class="bg-white hover:bg-zinc-200 text-black font-bold px-6 py-3 rounded-xl transition text-base shadow-lg">
-              Buscar
-            </button>
-            <button id="geo-btn" class="bg-zinc-800 hover:bg-zinc-700 text-white font-semibold px-5 py-3 rounded-xl transition text-base border border-zinc-700">
-              <span class="mono-emoji">📍</span> Usar GPS
-            </button>
-          </div>
-          <p id="location-info" class="text-zinc-400 text-base font-medium pt-1">Localização: Carregando...</p>
-        </div>
-
-        <!-- Ilustração SVG Monocromática da Cidade -->
-        <div class="w-28 h-28 sm:w-36 sm:h-36 flex-shrink-0 z-10 opacity-90">
-          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
-            <circle cx="100" cy="100" r="90" fill="#18181b"/>
-            <path d="M50 150V90L75 70L100 90V150H50Z" fill="#3f3f46"/>
-            <path d="M100 150V60L125 40L150 60V150H100Z" fill="#71717a"/>
-            <rect x="62" y="100" width="12" height="15" rx="2" fill="#ffffff"/>
-            <rect x="112" y="75" width="14" height="20" rx="2" fill="#ffffff"/>
-            <circle cx="100" cy="35" r="12" fill="#a1a1aa"/>
-            <path d="M100 28L104 35H96L100 28Z" fill="#000000"/>
-          </svg>
-        </div>
+    <!-- 2. Localização e Busca CEP -->
+    <section class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-bottom space-y-3">
+      <div class="flex justify-between items-center">
+        <label for="cep-input" class="text-xs font-bold uppercase tracking-wider text-sky-800">Sua Localização</label>
+        <span id="location-info" class="text-xs font-semibold text-slate-500">Localização: Carregando...</span>
+      </div>
+      <div class="flex gap-2">
+        <input type="text" id="cep-input" placeholder="Digite seu CEP" 
+               class="bg-slate-50 border border-slate-200 text-slate-800 text-sm px-3.5 py-2.5 rounded-xl flex-grow focus:outline-none focus:border-sky-500 font-medium" maxlength="8">
+        <button id="search-cep-btn" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2.5 rounded-xl text-sm transition shadow-bottom">
+          Buscar
+        </button>
+        <button id="geo-btn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-2.5 rounded-xl text-sm transition border border-slate-200">
+          📍
+        </button>
       </div>
     </section>
 
-    <!-- Grid: Clima e Cotações -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- 3. Carrossel de Vídeos do YouTube -->
+    <section id="youtube-section" class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-bottom space-y-3">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-800 flex items-center gap-1.5">
+          <span>▶</span> Destaques do YouTube
+        </h2>
+        <span class="text-[11px] text-slate-400">Em Alta</span>
+      </div>
+      <div id="youtube-carousel" class="flex gap-3 overflow-x-auto pb-1 scrollbar-none">
+        <p class="text-xs text-slate-400">Carregando vídeos...</p>
+      </div>
+    </section>
 
-      <!-- Card 1: Clima e Tempo -->
-      <section class="bg-zinc-900 p-6 rounded-2xl border border-zinc-800 shadow-xl space-y-4 flex flex-col justify-between">
-        <div>
-          <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-            <div class="flex items-center gap-3">
-              <!-- Ilustração Clima Monocromática -->
-              <svg class="w-10 h-10" viewBox="0 0 64 64" fill="none">
-                <circle cx="26" cy="26" r="12" fill="#71717a"/>
-                <path d="M20 44C20 37.3726 25.3726 32 32 32C37.2553 32 41.7008 35.3752 43.3442 40.109C44.3821 39.4026 45.6429 39 47 39C50.866 39 54 42.134 54 46C54 49.866 50.866 53 47 53H20C15.5817 53 12 49.4183 12 45C12 40.5817 15.5817 37 20 37" fill="#a1a1aa"/>
-              </svg>
-              <h2 class="text-xl font-bold text-zinc-200">Clima Agora</h2>
-            </div>
-            <span id="weather-temp" class="text-3xl font-black text-white">--°C</span>
-          </div>
-          <div id="weather-details" class="space-y-2.5 text-zinc-300 text-base pt-3">
-            <p class="flex justify-between"><span>Condição:</span> <strong id="weather-desc" class="text-white">Carregando...</strong></p>
-            <p class="flex justify-between"><span>Vento:</span> <strong id="weather-wind" class="text-white">-- km/h</strong></p>
-            <p class="flex justify-between"><span>Umidade:</span> <strong id="weather-humidity" class="text-white">--%</strong></p>
-          </div>
+    <!-- 4. Grid Clima & Cotações -->
+    <div class="grid grid-cols-2 gap-3">
+      
+      <!-- Card Clima -->
+      <section class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-bottom flex flex-col justify-between">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-bold text-sky-800 uppercase">Clima</span>
+          <span class="text-2xl">☀️</span>
+        </div>
+        <div class="my-2">
+          <span id="weather-temp" class="text-2xl font-black text-slate-900">--°C</span>
+          <p id="weather-desc" class="text-xs text-slate-500 font-medium truncate">Carregando...</p>
+        </div>
+        <div class="text-[11px] text-slate-400 space-y-0.5 border-t border-slate-100 pt-2">
+          <p class="flex justify-between"><span>Vento:</span> <strong id="weather-wind" class="text-slate-600">--</strong></p>
+          <p class="flex justify-between"><span>Umidade:</span> <strong id="weather-humidity" class="text-slate-600">--</strong></p>
         </div>
       </section>
 
-      <!-- Card 2: Cotações Financeiras -->
-      <section class="bg-zinc-900 p-6 rounded-2xl border border-zinc-800 shadow-xl space-y-4 flex flex-col justify-between">
-        <div>
-          <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-            <div class="flex items-center gap-3">
-              <!-- Ilustração Cotação Monocromática -->
-              <svg class="w-10 h-10" viewBox="0 0 64 64" fill="none">
-                <rect x="8" y="12" width="48" height="40" rx="8" fill="#27272a"/>
-                <path d="M16 40L28 28L36 36L48 20" stroke="#a1a1aa" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="48" cy="20" r="3" fill="#ffffff"/>
-              </svg>
-              <h2 class="text-xl font-bold text-zinc-200">Cotações</h2>
-            </div>
+      <!-- Card Cotações -->
+      <section class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-bottom flex flex-col justify-between">
+        <span class="text-xs font-bold text-sky-800 uppercase mb-1">Cotações</span>
+        <div class="space-y-1.5 text-xs">
+          <div class="flex justify-between items-center">
+            <span class="text-slate-500 font-medium">USD</span>
+            <span id="usd-val" class="font-bold text-slate-800">R$ --</span>
           </div>
-          <div class="space-y-3 text-base pt-3">
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
-              <span class="text-zinc-400 font-medium">Dólar (USD)</span>
-              <span id="usd-val" class="text-lg font-bold text-white">R$ --</span>
-            </div>
-            <div class="flex justify-between items-center border-b border-zinc-800 pb-2">
-              <span class="text-zinc-400 font-medium">Euro (EUR)</span>
-              <span id="eur-val" class="text-lg font-bold text-white">R$ --</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-zinc-400 font-medium">Bitcoin (BTC)</span>
-              <span id="btc-val" class="text-lg font-bold text-white">R$ --</span>
-            </div>
+          <div class="flex justify-between items-center border-t border-slate-100 pt-1">
+            <span class="text-slate-500 font-medium">EUR</span>
+            <span id="eur-val" class="font-bold text-slate-800">R$ --</span>
+          </div>
+          <div class="flex justify-between items-center border-t border-slate-100 pt-1">
+            <span class="text-slate-500 font-medium">BTC</span>
+            <span id="btc-val" class="font-bold text-slate-800">R$ --</span>
           </div>
         </div>
       </section>
 
     </div>
 
-    <!-- 2. Barra Larga de Vídeos do YouTube (Com Imagens/Thumbnails) -->
-    <section class="bg-zinc-900 border-b border-zinc-800 p-4 w-full">
-      <div class="max-w-4xl mx-auto space-y-3">
-        <div class="flex justify-between items-center">
-          <h2 class="text-sm font-bold text-zinc-300 uppercase tracking-wider flex items-center gap-2">
-            <span class="mono-emoji">▶</span> Destaques do YouTube
-          </h2>
-          <span class="text-xs text-zinc-500">Últimos vídeos em alta</span>
-        </div>
-
-        <!-- Carrossel com Scroll Horizontal de Miniaturas -->
-        <div id="youtube-carousel" class="flex gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-zinc-700">
-          <p class="text-xs text-zinc-500">Carregando vídeos...</p>
-        </div>
-      </div>
-    </section>
-    <!-- Card 3: Mobilidade -->
-    <section class="bg-zinc-900 p-6 rounded-2xl border border-zinc-800 shadow-xl space-y-4">
-      <div class="flex items-center gap-3 border-b border-zinc-800 pb-3">
-        <!-- Ilustração Mobilidade Monocromática -->
-        <svg class="w-10 h-10" viewBox="0 0 64 64" fill="none">
-          <circle cx="32" cy="32" r="24" fill="#27272a"/>
-          <path d="M20 38C20 38 24 26 32 26C40 26 44 38 44 38" stroke="#a1a1aa" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="26" cy="40" r="4" fill="#ffffff"/>
-          <circle cx="38" cy="40" r="4" fill="#ffffff"/>
-        </svg>
-        <h2 class="text-xl font-bold text-zinc-200">Mobilidade e Trânsito</h2>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <a id="link-maps" href="https://www.google.com/maps" target="_blank" class="bg-black hover:bg-zinc-800 text-white border border-zinc-800 p-4 rounded-xl text-center transition font-bold text-base block shadow">
-          <span class="mono-emoji">🗺️</span> Trânsito Agora
+    <!-- 5. Mobilidade e Trânsito -->
+    <section class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-bottom space-y-2.5">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-sky-800">Mobilidade e Trânsito</h2>
+      <div class="grid grid-cols-3 gap-2">
+        <a id="link-maps" href="https://www.google.com/maps" target="_blank" class="bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-100 p-2.5 rounded-xl text-center transition font-bold text-xs block">
+          🗺️ Trânsito
         </a>
-        <a id="link-waze" href="https://www.waze.com/live-map" target="_blank" class="bg-black hover:bg-zinc-800 text-white border border-zinc-800 p-4 rounded-xl text-center transition font-bold text-base block shadow">
-          <span class="mono-emoji">🚘</span> Alertas Waze
+        <a id="link-waze" href="https://www.waze.com/live-map" target="_blank" class="bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-100 p-2.5 rounded-xl text-center transition font-bold text-xs block">
+          🚘 Waze
         </a>
-        <a href="https://www.inmet.gov.br" target="_blank" class="bg-black hover:bg-zinc-800 text-white border border-zinc-800 p-4 rounded-xl text-center transition font-bold text-base block shadow">
-          <span class="mono-emoji">⚠️</span> Alertas INMET
+        <a href="https://www.inmet.gov.br" target="_blank" class="bg-sky-50 hover:bg-sky-100 text-sky-900 border border-sky-100 p-2.5 rounded-xl text-center transition font-bold text-xs block">
+          ⚠️ Alertas
         </a>
       </div>
     </section>
 
-    <!-- Card 4: Gastronomia Local -->
-    <section class="bg-zinc-900 p-6 rounded-2xl border border-zinc-800 shadow-xl space-y-4">
-      <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-        <div class="flex items-center gap-3">
-          <!-- Ilustração Gastronomia Monocromática -->
-          <svg class="w-10 h-10" viewBox="0 0 64 64" fill="none">
-            <circle cx="32" cy="32" r="22" stroke="#71717a" stroke-width="3"/>
-            <path d="M24 22V34M22 22H26M28 22V34" stroke="#a1a1aa" stroke-width="2" stroke-linecap="round"/>
-            <path d="M40 22V34C40 37 36 37 36 34V22" stroke="#a1a1aa" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <h2 class="text-xl font-bold text-zinc-200">Gastronomia Local</h2>
-        </div>
-        <button id="fetch-places-btn" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 text-sm px-3.5 py-1.5 rounded-lg transition font-semibold">
-          🔄 Atualizar
-        </button>
+    <!-- 6. CARD DO INSTAGRAM (Inserido logo abaixo da Mobilidade) -->
+    <section id="instagram-section" class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-bottom space-y-3">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-pink-600 flex items-center gap-1.5">
+          <span>📸</span> ÚLTIMOS DO INSTAGRAM
+        </h2>
+        <span class="text-[11px] text-slate-400">Feed Local</span>
       </div>
-
-      <!-- Filtros Monocromáticos -->
-      <div class="flex gap-2 text-sm overflow-x-auto pb-1">
-        <button onclick="filterPlaces('restaurant')" class="bg-black hover:bg-zinc-800 text-white border border-zinc-700 px-4 py-2 rounded-xl font-bold whitespace-nowrap transition">Restaurantes</button>
-        <button onclick="filterPlaces('bar')" class="bg-black hover:bg-zinc-800 text-white border border-zinc-700 px-4 py-2 rounded-xl font-bold whitespace-nowrap transition">Bares & Pubs</button>
-        <button onclick="filterPlaces('cafe')" class="bg-black hover:bg-zinc-800 text-white border border-zinc-700 px-4 py-2 rounded-xl font-bold whitespace-nowrap transition">Cafés</button>
-      </div>
-
-      <div id="places-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <p class="text-zinc-400 text-base col-span-2">Digite seu CEP ou ative o GPS para listar os locais próximos.</p>
+      <div id="instagram-container" class="space-y-2.5">
+        <p class="text-xs text-slate-400">Carregando fotos e publicações...</p>
       </div>
     </section>
 
-    <!-- Card 5: Notícias Regionais -->
-    <section class="bg-zinc-900 p-6 rounded-2xl border border-zinc-800 shadow-xl space-y-4">
-      <div class="flex justify-between items-center border-b border-zinc-800 pb-3">
-        <div class="flex items-center gap-3">
-          <!-- Ilustração Notícias Monocromática -->
-          <svg class="w-10 h-10" viewBox="0 0 64 64" fill="none">
-            <rect x="14" y="16" width="36" height="32" rx="4" fill="#27272a" stroke="#71717a" stroke-width="2"/>
-            <path d="M20 24H36M20 30H44M20 36H38" stroke="#a1a1aa" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <h2 class="text-xl font-bold text-zinc-200">Notícias Regionais</h2>
-        </div>
-        <button id="refresh-news-btn" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 text-sm px-3.5 py-1.5 rounded-lg transition font-semibold">
-          🔄 Atualizar
-        </button>
+    <!-- 7. Gastronomia Local (Restaurantes/Bares) -->
+    <section id="places-section" class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-bottom space-y-3">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-800">Gastronomia no Bairro</h2>
+        <button id="fetch-places-btn" class="text-xs text-sky-600 font-bold hover:underline">🔄 Atualizar</button>
       </div>
 
-      <div id="news-container" class="space-y-3.5">
-        <p class="text-zinc-400 text-base">Carregando as principais manchetes...</p>
+      <div class="flex gap-1.5 text-xs overflow-x-auto pb-1">
+        <button onclick="filterPlaces('restaurant')" class="bg-sky-600 text-white font-bold px-3 py-1 rounded-full whitespace-nowrap shadow-bottom">Restaurantes</button>
+        <button onclick="filterPlaces('bar')" class="bg-slate-100 text-slate-600 font-semibold px-3 py-1 rounded-full whitespace-nowrap hover:bg-slate-200">Bares</button>
+        <button onclick="filterPlaces('cafe')" class="bg-slate-100 text-slate-600 font-semibold px-3 py-1 rounded-full whitespace-nowrap hover:bg-slate-200">Cafés</button>
+      </div>
+
+      <div id="places-container" class="grid grid-cols-1 gap-2 text-xs">
+        <p class="text-slate-400">Digite seu CEP para carregar estabelecimentos.</p>
       </div>
     </section>
 
-    <!-- Banner AdSense Monocromático -->
-    <div class="my-6 p-4 bg-zinc-900/50 border border-dashed border-zinc-800 rounded-2xl text-center">
-      <span class="text-xs uppercase tracking-widest text-zinc-500 font-bold block mb-2">Publicidade</span>
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" 
-           data-ad-slot="YYYYYYYYYY"
-           data-ad-format="horizontal"
-           data-full-width-responsive="true"></ins>
-      <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
+    <!-- 8. Notícias Regionais -->
+    <section id="news-section" class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-bottom space-y-3">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-sky-800">Notícias Regionais</h2>
+        <button id="refresh-news-btn" class="text-xs text-sky-600 font-bold hover:underline">🔄 Atualizar</button>
+      </div>
+      <div id="news-container" class="space-y-2.5">
+        <p class="text-xs text-slate-400">Carregando notícias...</p>
+      </div>
+    </section>
+
+    <!-- Publicidade AdSense -->
+    <div class="p-3 bg-slate-200/60 border border-dashed border-slate-300 rounded-2xl text-center">
+      <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold block mb-1">Publicidade</span>
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="YYYYYYYYYY" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
 
-    <!-- Apoio ao Projeto -->
-    <section class="bg-zinc-900/60 p-5 rounded-2xl border border-zinc-800 text-center space-y-3">
-      <p class="text-base text-zinc-300 font-medium">UrbanoFlex é mantido com dados públicos e código aberto.</p>
-      <button onclick="alert('Chave Pix para apoio: seu-email@exemplo.com')" class="bg-white hover:bg-zinc-200 text-black font-bold px-5 py-2.5 rounded-xl text-base transition">
-        <span class="mono-emoji">☕</span> Apoiar o desenvolvedor via Pix
+    <!-- Apoio ao Criador -->
+    <section class="bg-sky-50 border border-sky-100 p-4 rounded-2xl text-center space-y-2 shadow-bottom">
+      <p class="text-xs text-sky-900 font-medium">UrbanoFlex é gratuito e mantido em código aberto.</p>
+      <button onclick="alert('Chave Pix: seu-email@exemplo.com')" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow-bottom">
+        ☕ Apoiar via Pix
       </button>
     </section>
 
   </main>
 
-  <footer class="bg-black border-t border-zinc-800 p-5 text-center text-sm text-zinc-500 font-medium">
-    <p>UrbanoFlex &copy; 2026 - Minimalista, Acessível e em Código Aberto</p>
-  </footer>
+  <!-- Bottom Navigation Bar com rotas corrigidas -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-2 flex justify-around items-center z-50 text-slate-500 shadow-lg max-w-md mx-auto">
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-0.5 text-sky-600 font-bold text-[10px]">
+      <span class="text-base">🏠</span>
+      <span>Início</span>
+    </button>
+    <button onclick="document.getElementById('youtube-section').scrollIntoView({behavior: 'smooth'})" class="flex flex-col items-center gap-0.5 hover:text-sky-600 text-[10px] font-medium">
+      <span class="text-base">🍿</span>
+      <span>Mídia</span>
+    </button>
+    <button onclick="document.getElementById('instagram-section').scrollIntoView({behavior: 'smooth'})" class="flex flex-col items-center gap-0.5 hover:text-pink-600 text-[10px] font-medium">
+      <span class="text-base">📸</span>
+      <span>Instagram</span>
+    </button>
+    <button onclick="document.getElementById('places-section').scrollIntoView({behavior: 'smooth'})" class="flex flex-col items-center gap-0.5 hover:text-sky-600 text-[10px] font-medium">
+      <span class="text-base">🍕</span>
+      <span>Locais</span>
+    </button>
+  </nav>
 
   <script src="app.js"></script>
 </body>

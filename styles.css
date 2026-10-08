@@ -1,20 +1,26 @@
-/* Animação estilo Ticker de Telejornal */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Sombra focada apenas na parte inferior */
+.shadow-bottom {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Animação Ticker */
 @keyframes ticker {
-  0% {
-    transform: translate3d(100%, 0, 0);
-  }
-  100% {
-    transform: translate3d(-100%, 0, 0);
-  }
+  0% { transform: translate3d(100%, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
 }
 
 .ticker-wrapper {
   display: inline-block;
   white-space: nowrap;
-  animation: ticker 35s linear infinite;
+  animation: ticker 30s linear infinite;
 }
 
-/* Pausa o deslizamento ao passar o mouse ou tocar no celular para facilitar a leitura */
 .ticker-wrapper:hover {
   animation-play-state: paused;
 }
