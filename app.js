@@ -280,3 +280,79 @@ function translateAmenity(tag) {
 document.getElementById('fetch-places-btn').addEventListener('click', () => {
   fetchNearbyPlaces(currentLat, currentLon);
 });
+
+// Função para buscar notícias em tempo real (Google News Brasil via RSS2JSON)
+async function fetchNews(cityName = '') {
+  const newsContainer = document.getElementById('news-container');
+  newsContainer.innerHTML = `<p class="text-slate-400 text-xs">Buscando manchetes atualizadas...</p>`;
+
+  // Termo de busca: se houver cidade definida, busca notícias regionais; caso contrário, notícias gerais do Brasil
+  const query = cityName ? encodeURIComponent(`noticias ${cityName.split(',')[0]}`) : 'brasil';
+  const rssUrl = `https://news.google.com/rss/search?q=${query}&hl=pt-BR&gl=BR&ceid=BR:pt-419`;
+  const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.status === 'ok' && data.items && data.items.length > 0) {
+      renderNews(data.items.slice(0, 4)); // Exibe as 4 principais notícias
+    } else {
+      // Fallback para notícias gerais do Brasil se não achar da cidade
+      fetchGeneralNews();
+    }
+  } catch (error) {
+    console.error('Erro ao carregar notícias:', error);
+    newsContainer.innerHTML = `<p class="text-slate-400 text-xs">Não foi possível carregar as notícias no momento.</p>`;
+  }
+}
+
+// Fallback de Notícias Principais do Brasil
+async function fetchGeneralNews() {
+  const rssUrl = `https://news.google.com/rss?hl=pt-BR&gl=BR&ceid=BR:pt-419`;
+  const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    if (data.items) {
+      renderNews(data.items.slice(0, 4));
+    }
+  } catch (err) {
+    console.error('Erro no fallback de notícias:', err);
+  }
+}
+
+// Renderiza os cards de notícia na tela
+function renderNews(newsItems) {
+  const container = document.getElementById('news-container');
+  container.innerHTML = '';
+
+  newsItems.forEach(item => {
+    const pubDate = new Date(item.pubDate).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    
+    const card = document.createElement('article');
+    card.className = "bg-slate-900/50 p-3 rounded-lg border border-slate-700/50 hover:border-slate-600 transition";
+    card.innerHTML = `
+      <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="block group">
+        <h3 class="text-sm font-semibold text-slate-100 group-hover:text-sky-400 transition leading-snug mb-1">
+          ${item.title}
+        </h3>
+        <div class="flex justify-between items-center text-[11px] text-slate-400 mt-2">
+          <span>${item.author || 'Fonte de Notícias'}</span>
+          <span>${pubDate} ↗</span>
+        </div>
+      </a>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// Conectar à inicialização e atualização do app
+document.addEventListener('DOMContentLoaded', () => {
+  fetchNews(); // Carrega na abertura
+});
+
+document.getElementById('refresh-news-btn').addEventListener('click', () => {
+  fetchNews(currentCityName);
+});
